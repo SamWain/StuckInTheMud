@@ -78,11 +78,11 @@ public class SITMDatabaseHandler {
     }
     
     public boolean hasRow(Player player) {
-        String query = "SELECT COUNT(*) AS `Count` FROM " + plugin.dbTablePrefix + "_leaderboard WHERE name = '" + player.getName().toLowerCase() + "' LIMIT 1;";
+        String query = "SELECT COUNT(*) AS Count FROM " + plugin.dbTablePrefix + "_leaderboard WHERE name = '" + player.getName().toLowerCase() + "' LIMIT 1;";
         ResultSet result = this.doQuery(query);
         
         try {
-            if (result.next() && result.getInt("Count") == 1) return true;
+            if (result != null && result.next() && result.getInt("Count") == 1) return true;
             else return false;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,12 +106,14 @@ public class SITMDatabaseHandler {
                 return true;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                return false;
             } catch (InstantiationException e) {
                 e.printStackTrace();
+                return false;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+                return false;
             }
-            return false;
         } else {
             plugin.manageSQLite.updateQuery(query);
             return true;
@@ -126,12 +128,14 @@ public class SITMDatabaseHandler {
                 return result;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                return result;
             } catch (InstantiationException e) {
                 e.printStackTrace();
+                return result;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+                return result;
             }
-            return null;
         } else {
             return plugin.manageSQLite.sqlQuery(query);
         }

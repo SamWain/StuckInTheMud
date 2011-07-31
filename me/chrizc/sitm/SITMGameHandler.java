@@ -106,6 +106,7 @@ public class SITMGameHandler {
     public void cleanUpGame() {
         plugin.players.clear();
         this.unTelePlayers();
+        this.restoreInventories();
         plugin.numOfPlayers = 0;
         plugin.numOfChasers = 0;
         plugin.numOfFrozen = 0;
@@ -183,6 +184,8 @@ public class SITMGameHandler {
                 }
                 
                 telePlayersToArena();
+                
+                this.storeInventories();
 
                 this.startCountdown();
             }
@@ -327,8 +330,8 @@ public class SITMGameHandler {
         while (i.hasNext()) {
             Player p = (Player) i.next();
             p.getInventory().setContents(inventories.get(p));
-            inventories.remove(p);
         }
+        inventories.clear();
         return true;
     }
     

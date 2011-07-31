@@ -79,8 +79,6 @@ public class SITMPlayerListener extends PlayerListener {
         if (plugin.inGame == true && plugin.players.containsKey(event.getPlayer()) && plugin.players.get(event.getPlayer()).equalsIgnoreCase("FROZEN")) {
             Location locFrom = event.getFrom();
             Location locTo = event.getTo();
-            System.out.println(locFrom.getX() != locTo.getX());
-            System.out.println(locFrom.getZ() != locTo.getZ());
             if ((locFrom.getX() != locTo.getX()) || (locFrom.getZ() != locTo.getZ())) {
                 event.setTo(new Location(event.getPlayer().getWorld(), locFrom.getX(), locTo.getY(), locFrom.getZ()));
             }
