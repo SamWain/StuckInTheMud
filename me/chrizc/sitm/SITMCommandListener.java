@@ -59,7 +59,11 @@ public class SITMCommandListener {
         } else if (args[0].equalsIgnoreCase("unreg")) {
             gameHandler.unreg(player);
         } else if (args[0].equalsIgnoreCase("begin")) {
-            gameHandler.beginGame(player);
+            if (args.length > 1) {
+                gameHandler.beginGame(player, Integer.parseInt(args[1]));
+            } else {
+                gameHandler.beginGame(player, config.defaultTime);
+            }
         } else if (args[0].equalsIgnoreCase("cancel")) {
             gameHandler.cancelCountdown(player);
         } else if (args[0].equalsIgnoreCase("list")) {

@@ -18,6 +18,7 @@ public class SITMConfig {
     
     //Various variables
     public int item;
+    public int defaultTime;
     
     //Lobby variables
     public boolean lobby;
@@ -58,6 +59,8 @@ public class SITMConfig {
             file.setProperty("database.tablePrefix", "sitm");
             
             file.setProperty("listItem" , 359);
+            
+            file.setProperty("defaultTimeLimit", 5);
 
             file.setProperty("leaderboard", true);
 
@@ -73,6 +76,8 @@ public class SITMConfig {
         plugin.dbTablePrefix = file.getString("database.tablePrefix", "sitm");
         
         item = file.getInt("listItem", 359);
+        
+        defaultTime = file.getInt("defaultTimeLimit", 5);
         
         leaderboard = file.getBoolean("leaderboard", true);
     }

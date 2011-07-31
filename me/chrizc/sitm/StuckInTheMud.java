@@ -7,6 +7,7 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 
 import java.util.HashMap;
 import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import org.bukkit.plugin.Plugin;
@@ -34,7 +35,7 @@ public class StuckInTheMud extends JavaPlugin {
     
     private final SITMConfig config = new SITMConfig(this);
     private final SITMDatabaseHandler databaseHandler = new SITMDatabaseHandler(this, config);
-    private final SITMGameHandler gameHandler = new SITMGameHandler(this, databaseHandler, config);
+    public final SITMGameHandler gameHandler = new SITMGameHandler(this, databaseHandler, config);
     private final SITMEntityListener entityListener = new SITMEntityListener(this, gameHandler);
     private final SITMPlayerListener playerListener = new SITMPlayerListener(this, gameHandler, databaseHandler, config);
     private final SITMBlockListener blockListener = new SITMBlockListener(this, config);
@@ -69,6 +70,7 @@ public class StuckInTheMud extends JavaPlugin {
             arena.tearDown();
             config.clearArena();
         }
+        Bukkit.getServer().getScheduler().cancelTasks(this);
         gameHandler.cleanUpGame();
         log.info(logPrefix + "disabled.");
     }

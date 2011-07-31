@@ -22,6 +22,8 @@ public class SITMGameHandler {
     public String PREFIX = ChatColor.DARK_GREEN + "[StuckInTheMud] ";
     public String ERR_PREFIX = ChatColor.RED + "[StuckInTheMud] ";
     
+    int time = 5;
+    
     public HashMap<Player, ItemStack[]> inventories = new HashMap<Player, ItemStack[]>();
     
     public SITMGameHandler(StuckInTheMud instance, SITMDatabaseHandler database, SITMConfig config) {
@@ -131,7 +133,7 @@ public class SITMGameHandler {
         }
     }
     
-    public void beginGame(Player player) {
+    public void beginGame(Player player, int timeLimit) {
         if (!plugin.inRegistration || plugin.inGame) return;
         
         if (plugin.checkPermissions("sitm.admin.begin", player) == true) {
@@ -187,12 +189,13 @@ public class SITMGameHandler {
                 
                 this.storeInventories();
 
-                this.startCountdown();
+                this.startCountdown(timeLimit);
             }
         }
     }
     
-    public void startCountdown() {
+    public void startCountdown(int timeLimit) {
+        time = timeLimit;
         if (plugin.inCountdown == true) {
             Bukkit.getServer().broadcastMessage(PREFIX + "The game is about to begin!");
             Bukkit.getServer().broadcastMessage(PREFIX + "3..");
@@ -211,6 +214,16 @@ public class SITMGameHandler {
                     plugin.inGame = true;
                     Bukkit.getServer().broadcastMessage(PREFIX + "GO!");
                     plugin.inCountdown = false;
+                    Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
+                        public void run() {
+                            Bukkit.getServer().broadcastMessage(PREFIX + "Hurry, chasers! You only have " + ChatColor.RED + "ONE MINUTE" + ChatColor.DARK_GREEN + " left!");
+                        }
+                    }, ((time - 1) * 60) * 20);
+                    Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
+                        public void run() {
+                            plugin.gameHandler.regularVictory();
+                        }
+                    }, (time * 60) * 20);
                 }
             }, 90L);
         }
@@ -250,18 +263,18 @@ public class SITMGameHandler {
                     String query;
                     if (plugin.players.get(p).equalsIgnoreCase("FROZEN") || plugin.players.get(p).equalsIgnoreCase("Regular")) {                    
                         if (databaseHandler.hasRow(p)) {
-                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsRegular = timesAsRegular + 1 WHERE name = '" + p.getName().toLowerCase() + "' LIMIT 1;";
+                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsRegular = timesAsRegular + 1 WHERE name = '" + p.getName().toLowerCase() + "';";
                         } else {
                             databaseHandler.createRow(p);
-                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsRegular = timesAsRegular + 1 WHERE name = '" + p.getName().toLowerCase() + "' LIMIT 1;";
+                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsRegular = timesAsRegular + 1 WHERE name = '" + p.getName().toLowerCase() + "';";
                         }
                         databaseHandler.updateQuery(query);
                     } else {
                         if (databaseHandler.hasRow(p)) {
-                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsChaser = timesAsChaser + 1, winsAsChaser = winsAsChaser + 1 WHERE name = '" + p.getName().toLowerCase() + "' LIMIT 1;";
+                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsChaser = timesAsChaser + 1, winsAsChaser = winsAsChaser + 1 WHERE name = '" + p.getName().toLowerCase() + "';";
                         } else {
                             databaseHandler.createRow(p);
-                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsChaser = timesAsChaser + 1, winsAsChaser = winsAsChaser + 1 WHERE name = '" + p.getName().toLowerCase() + "' LIMIT 1;";
+                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsChaser = timesAsChaser + 1, winsAsChaser = winsAsChaser + 1 WHERE name = '" + p.getName().toLowerCase() + "';";
                         }
                         databaseHandler.updateQuery(query);
                     }
@@ -284,18 +297,18 @@ public class SITMGameHandler {
                     String query;
                     if (plugin.players.get(p).equalsIgnoreCase("FROZEN") || plugin.players.get(p).equalsIgnoreCase("Regular")) {                    
                         if (databaseHandler.hasRow(p)) {
-                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsRegular = timesAsRegular + 1, winsAsRegular = winsAsRegular + 1 WHERE name = '" + p.getName().toLowerCase() + "' LIMIT 1;";
+                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsRegular = timesAsRegular + 1, winsAsRegular = winsAsRegular + 1 WHERE name = '" + p.getName().toLowerCase() + "';";
                         } else {
                             databaseHandler.createRow(p);
-                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsRegular = timesAsRegular + 1, winsAsRegular = winsAsRegular + 1 WHERE name = '" + p.getName().toLowerCase() + "' LIMIT 1;";
+                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsRegular = timesAsRegular + 1, winsAsRegular = winsAsRegular + 1 WHERE name = '" + p.getName().toLowerCase() + "';";
                         }
                         databaseHandler.updateQuery(query);
                     } else {
                         if (databaseHandler.hasRow(p)) {
-                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsChaser = timesAsChaser + 1 WHERE name = '" + p.getName().toLowerCase() + "' LIMIT 1;";
+                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsChaser = timesAsChaser + 1 WHERE name = '" + p.getName().toLowerCase() + "';";
                         } else {
                             databaseHandler.createRow(p);
-                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsChaser = timesAsChaser + 1 WHERE name = '" + p.getName().toLowerCase() + "' LIMIT 1;";
+                            query = "UPDATE " + plugin.dbTablePrefix + "_leaderboard SET timesAsChaser = timesAsChaser + 1 WHERE name = '" + p.getName().toLowerCase() + "';";
                         }
                         databaseHandler.updateQuery(query);
                     }

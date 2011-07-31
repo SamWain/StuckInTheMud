@@ -60,8 +60,8 @@ public class SITMPlayerListener extends PlayerListener {
     
     @Override
     public void onPlayerMove(PlayerMoveEvent event) {
-        //If we're not in game, don't do anything else. - performance measure.
-        if (plugin.inGame == false) return;
+        //If we're not in game or in countdown, don't do anything else. - performance measure.
+        if (plugin.inGame == false && plugin.inCountdown) return;
 
         //If we're in countdown, freeze players.
         if (plugin.inCountdown == true && plugin.players.containsKey(event.getPlayer())) {
@@ -124,7 +124,7 @@ public class SITMPlayerListener extends PlayerListener {
             if (plugin.inRegistration == true) {
                 gameHandler.restoreInventory(player);
                 plugin.players.remove(player);
-                Bukkit.getServer().broadcastMessage(ERR_PREFIX + ChatColor.YELLOW + player.getName() + ChatColor.DARK_GREEN + " has been kicked from the server! They've been un-registered from the current game.");
+                Bukkit.getServer().broadcastMessage(ERR_PREFIX + ChatColor.YELLOW + player.getName() + ChatColor.RED + " has been kicked from the server! They've been un-registered from the current game.");
                 if (plugin.numOfPlayers == 1) {
                     Bukkit.getServer().broadcastMessage(ERR_PREFIX + "There are no more players left in the game! The game has ended.");
                     plugin.inRegistration = false;

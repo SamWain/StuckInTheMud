@@ -82,8 +82,14 @@ public class SITMDatabaseHandler {
         ResultSet result = this.doQuery(query);
         
         try {
-            if (result != null && result.next() && result.getInt("Count") == 1) return true;
-            else return false;
+            if (result != null && result.next() && result.getInt("Count") == 1) { 
+                result.close();
+                return true; 
+            }
+            else {
+                result.close();
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
