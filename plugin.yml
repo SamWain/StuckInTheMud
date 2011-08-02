@@ -1,0 +1,30 @@
+name: StuckInTheMud
+main: me.chrizc.sitm.StuckInTheMud
+version: 1.0
+author: ChrizC
+description: StuckInTheMud brings the old childhood game into the Minecraft world!
+commands:
+  mud:
+    description: Interact with StuckInTheMud
+    aliases:
+      - stuck
+      - sitm
+      - stuckinthemud
+permissions:
+  sitm.admin.*:
+    default: op
+    children:
+      sitm.admin.reg: true
+      sitm.admin.begin: true
+      sitm.admin.cancel: true
+      sitm.admin.define: true
+      sitm.admin.generate: true
+      sitm.admin.teardown: true
+      sitm.admin.freeze: true
+      sitm.admin.forcereg: true
+      sitm.admin.endgame: true
+  sitm.users.*:
+    default: true
+    children:
+      sitm.users.join: true
+website: http://chrizc.co.uk/index.php?url=plugins
