@@ -1,6 +1,6 @@
 name: StuckInTheMud
 main: me.chrizc.sitm.StuckInTheMud
-version: 1.0
+version: 1.0b1
 author: ChrizC
 description: StuckInTheMud brings the old childhood game into the Minecraft world!
 commands:

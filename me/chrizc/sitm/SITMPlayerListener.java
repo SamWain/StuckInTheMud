@@ -54,16 +54,18 @@ public class SITMPlayerListener extends PlayerListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (config.leaderboard) databaseHandler.createRow(event.getPlayer());
         
-        int[][] arr = new int[2][3];
-        try {
-            String[] p1 = config.lobby_area1.split(",");
-            String[] p2 = config.lobby_area2.split(",");
-            arr = Arena.parseMinMax(p1, p2);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
+        if (config.arena) {
+            int[][] arr = new int[2][3];
+            try {
+                String[] p1 = config.arena_area1.split(",");
+                String[] p2 = config.arena_area2.split(",");
+                arr = Arena.parseMinMax(p1, p2);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+
+            if (Arena.isWithin(arr[0], arr[1], event.getPlayer().getLocation().getBlock())) gameHandler.telePlayerToLobby(event.getPlayer());
         }
-        
-        if (Arena.isWithin(arr[0], arr[1], event.getPlayer().getLocation().getBlock())) gameHandler.telePlayerToLobby(event.getPlayer());
         
         if (!plugin.inRegistration) return;
         
